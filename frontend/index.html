@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Recall — Intelligent image search powered by AI">
+    <title>Recall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@700&family=Khula:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     STEP 1 — SPLASH SCREEN
+     ══════════════════════════════════════════════ -->
+<div id="splashScreen">
+    <svg class="splash-svg" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#3b82f6"/>
+                <stop offset="50%"  stop-color="#8b5cf6"/>
+                <stop offset="100%" stop-color="#10b981"/>
+            </linearGradient>
+            <pattern id="wave" x="0" y="-1" width="100%" height="100%" patternUnits="userSpaceOnUse">
+                <path d="M-80 18 Q-60 14 -40 18 T0 18 T40 18 T80 18 T120 18 T160 18 T200 18 T240 18 V40 H-80z"
+                    fill="url(#waveGradient)">
+                    <animateTransform attributeName="transform" begin="0s" dur="1.6s"
+                        type="translate" from="0,0" to="80,0" repeatCount="indefinite"/>
+                </path>
+            </pattern>
+            <mask id="textMask">
+                <text text-anchor="middle" x="100" y="30" font-size="34"
+                    font-family="'Cabin Condensed', sans-serif" font-weight="700"
+                    letter-spacing="6" fill="white">RECALL</text>
+            </mask>
+        </defs>
+        <text text-anchor="middle" x="100" y="30" font-size="34"
+            font-family="'Cabin Condensed', sans-serif" font-weight="700"
+            letter-spacing="6" fill="white" fill-opacity="0.08">RECALL</text>
+        <rect x="0" y="0" width="200" height="40" fill="url(#wave)" mask="url(#textMask)"/>
+    </svg>
+    <p class="splash-tagline">Intelligent Image Search</p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 2 — MAIN APP
+     ══════════════════════════════════════════════ -->
+<div id="appShell" class="app-hidden">
+
+    <!-- ── Top Bar ── -->
+    <header class="topbar">
+
+        <!-- Logo button → opens dropdown -->
+        <div class="logo-wrap" id="logoWrap">
+            <button class="logo" id="logoBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span>Recall</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div class="logo-dropdown" id="logoDropdown">
+
+                <!-- Logged-in user info -->
+                <div class="dropdown-user" id="dropdownUser">
+                    <div class="dropdown-avatar" id="dropdownAvatar">R</div>
+                    <div class="dropdown-email" id="dropdownEmail">—</div>
+                </div>
+                <div class="dropdown-divider"></div>
+
+                <!-- Auth buttons (shown when logged out) -->
+                <div id="authOptions">
+                    <button class="dropdown-item" onclick="openAuthTab('signin');closeDropdown()">
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Sign In
+                    </button>
+                    <button class="dropdown-item" onclick="openAuthTab('signup');closeDropdown()">
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                        Sign Up
+                    </button>
+                    <button class="dropdown-item" onclick="openAuthTab('forgot');closeDropdown()">
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Forgot Password
+                    </button>
+                </div>
+
+                <!-- Logout (shown when logged in) -->
+                <div id="loggedInOptions" style="display:none;">
+                    <button class="dropdown-item danger" onclick="logout()">
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <!-- Theme toggle -->
+                <button class="dropdown-item" onclick="toggleTheme()">
+                    <svg id="dropdownThemeIcon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <span id="dropdownThemeLabel">Light Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tagline typewriter -->
+        <div class="tagline-wrap">
+            <span id="taglineText"></span><span class="tagline-cursor" id="taglineCursor">_</span>
+        </div>
+
+    </header>
+
+    <!-- ── Gallery ── -->
+    <main class="main-content">
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <div class="icon">🔍</div>
+            <h2>No images found</h2>
+            <p>Upload some memories or try a different search.</p>
+        </div>
+        <div class="results" id="resultsContainer"></div>
+    </main>
+
+    <!-- ══════════════════════════════════════════
+         BOTTOM NAV — Samsung pill style
+         ══════════════════════════════════════════ -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-inner">
+
+            <button class="nav-btn" id="openTrashBtn" title="Trash">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Trash</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <form id="searchForm" class="nav-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="17" height="17"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search memories…"
+                    autocomplete="off" autocorrect="off" spellcheck="false">
+            </form>
+
+            <div class="nav-divider"></div>
+
+            <button class="nav-btn nav-btn-add" id="openAddBtn" title="Add Images">
+                <div class="nav-icon nav-icon-add">
+                    <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Add</span>
+            </button>
+
+        </div>
+    </nav>
+
+</div><!-- /appShell -->
+
+<!-- ════════════════════════════════════════════════
+     MODALS
+     ════════════════════════════════════════════════ -->
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal" onclick="if(event.target===this)closeModal('authModal')">
+    <div class="modal auth-modal">
+        <div class="modal-header">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab"         id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+                <button class="auth-tab"         id="tab-forgot" onclick="switchTab('forgot')">Reset</button>
+            </div>
+            <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
+        </div>
+
+        <div class="auth-panel" id="panel-signin">
+            <p class="auth-subtitle">Welcome back</p>
+            <form id="signinForm" class="auth-form">
+                <input type="email"    id="signinEmail"    class="form-field" placeholder="Email address" required>
+                <input type="password" id="signinPassword" class="form-field" placeholder="Password" required>
+                <button type="submit"  class="btn-primary">Sign In</button>
+            </form>
+            <p class="auth-error" id="signinError"></p>
+        </div>
+
+        <div class="auth-panel" id="panel-signup" style="display:none;">
+            <p class="auth-subtitle">Create your Recall account</p>
+            <form id="signupForm" class="auth-form">
+                <input type="email"    id="signupEmail"    class="form-field" placeholder="Email address" required>
+                <input type="password" id="signupPassword" class="form-field" placeholder="Choose a password" required>
+                <button type="submit"  class="btn-primary">Create Account</button>
+            </form>
+            <p class="auth-error" id="signupError"></p>
+        </div>
+
+        <div class="auth-panel" id="panel-forgot" style="display:none;">
+            <p class="auth-subtitle">Reset your password</p>
+            <form id="forgotForm" class="auth-form">
+                <input type="email" id="forgotEmail" class="form-field" placeholder="Email address" required>
+                <button type="submit" class="btn-primary">Send Reset Link</button>
+            </form>
+            <p class="auth-error"  id="forgotError"></p>
+            <p class="auth-note">Password reset email is not yet wired to the backend.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Add Image Modal -->
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeModal('addModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Add Images</h3>
+            <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
+        </div>
+        <div class="drop-zone" id="dropZone">
+            <input type="file" id="imageInput" accept="image/*" multiple title="">
+            <div style="font-size:32px;margin-bottom:10px;">📁</div>
+            <p style="font-weight:600;margin-bottom:6px;">Drop images here or click to browse</p>
+            <span style="font-size:12px;color:var(--text-secondary);">PNG, JPG, GIF, WEBP — auto-compressed</span>
+        </div>
+        <div class="upload-sources">
+            <button type="button" class="upload-btn" onclick="startCamera()">📷 Camera</button>
+            <button type="button" class="upload-btn" onclick="loadGooglePicker()">☁️ Google Drive</button>
+        </div>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleUpload(this.files)">
+    </div>
+</div>
+
+<!-- Camera Modal -->
+<div class="modal-overlay" id="cameraModal" onclick="if(event.target===this)closeCamera()">
+    <div class="modal" style="display:flex;flex-direction:column;align-items:center;max-width:500px;">
+        <div class="modal-header" style="width:100%;">
+            <h3>Take a Photo</h3>
+            <button class="modal-close" onclick="closeCamera()">&times;</button>
+        </div>
+        <div style="position:relative;width:100%;border-radius:12px;overflow:hidden;background:#000;display:flex;justify-content:center;margin-bottom:18px;">
+            <video id="cameraWebcam" style="width:100%;max-height:360px;display:none;" autoplay playsinline></video>
+        </div>
+        <button onclick="capturePhoto()" class="btn-primary" style="width:100%;font-size:16px;">📸 Capture &amp; Upload</button>
+        <canvas id="cameraCanvas" style="display:none;"></canvas>
+    </div>
+</div>
+
+<!-- Trash Modal -->
+<div class="modal-overlay" id="trashModal" onclick="if(event.target===this)closeModal('trashModal')">
+    <div class="modal" style="max-width:460px;">
+        <div class="modal-header">
+            <h3>Trash</h3>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button class="trash-btn" style="background:transparent;color:#ef4444;border:1px solid #ef4444;padding:6px 14px;" onclick="emptyTrash()">Empty All</button>
+                <button class="modal-close" onclick="closeModal('trashModal')">&times;</button>
+            </div>
+        </div>
+        <div class="trash-content" style="text-align:center;padding:16px 0;"></div>
+    </div>
+</div>
+
+<!-- Lightbox -->
+<div class="modal-overlay" id="imageModal" onclick="if(event.target===this)closeModal('imageModal')">
+    <div class="modal" style="position:relative;">
+        <button class="modal-close"
+            style="position:absolute;top:-44px;right:0;background:transparent;color:white;font-size:30px;width:auto;height:auto;border-radius:0;"
+            onclick="closeModal('imageModal')">&times;</button>
+        <img id="fullImage" src="" alt="Full size view">
+    </div>
+</div>
+
+<!-- Status Overlay -->
+<div class="status-overlay" id="loadingStatus">
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <span class="loading-text" id="loadingText">Processing…</span>
+        <div class="progress-track" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
