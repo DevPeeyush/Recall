@@ -96,13 +96,6 @@
                     </button>
                 </div>
 
-                <div class="dropdown-divider"></div>
-
-                <!-- Theme toggle -->
-                <button class="dropdown-item" onclick="toggleTheme()">
-                    <svg id="dropdownThemeIcon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <span id="dropdownThemeLabel">Light Mode</span>
-                </button>
             </div>
         </div>
 
@@ -110,6 +103,13 @@
         <div class="tagline-wrap">
             <span id="taglineText"></span><span class="tagline-cursor" id="taglineCursor">_</span>
         </div>
+
+        <!-- Theme toggle — top-right corner -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle theme">
+            <svg id="themeToggleIcon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
 
     </header>
 
@@ -123,50 +123,40 @@
         <div class="results" id="resultsContainer"></div>
     </main>
 
-    <!-- ══════════════════════════════════════════
-         BOTTOM NAV — Samsung pill style
-         ══════════════════════════════════════════ -->
-    <nav class="bottom-nav">
-        <div class="bottom-nav-inner">
-
-            <button class="nav-btn" id="openTrashBtn" title="Trash">
-                <div class="nav-icon">
-                    <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                    </svg>
-                </div>
-                <span class="nav-label">Trash</span>
-            </button>
-
-            <div class="nav-divider"></div>
-
-            <form id="searchForm" class="nav-search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="17" height="17"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-                <input type="text" id="searchInput" placeholder="Search memories…"
-                    autocomplete="off" autocorrect="off" spellcheck="false">
-            </form>
-
-            <div class="nav-divider"></div>
-
-            <button class="nav-btn nav-btn-add" id="openAddBtn" title="Add Images">
-                <div class="nav-icon nav-icon-add">
-                    <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                </div>
-                <span class="nav-label">Add</span>
-            </button>
-
-        </div>
-    </nav>
-
 </div><!-- /appShell -->
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAV — Samsung pill style (FIXED POSITION - OUTSIDE appShell)
+     ══════════════════════════════════════════ -->
+<nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+
+        <button class="nav-btn" id="openTrashBtn" title="Trash">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+        </button>
+
+        <form id="searchForm" class="nav-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search — 'receipt', 'dog'"
+                autocomplete="off" autocorrect="off" spellcheck="false">
+        </form>
+
+        <button class="nav-btn nav-btn-add" id="openAddBtn" title="Add Images">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+        </button>
+
+    </div>
+</nav>
 
 <!-- ════════════════════════════════════════════════
      MODALS
